@@ -30,6 +30,10 @@ class SpeedtestWriter:
 
     def shutdown(self, *args):
         log.info("Shutting Down.")
+        if self.p and self.p.poll() is None:
+            log.info("Terminating speedtest subprocess.")
+            self.p.terminate()
+            self.p.wait()
         sys.exit(0)
 
     def run_speedtest(self):
@@ -40,29 +44,32 @@ class SpeedtestWriter:
 
         try:
             log.info("Running speedtest...")
-            self.p = subprocess.run(
+            self.p = subprocess.Popen(
                 ["speedtest", "--accept-license", "-f", "json"],
-                input="yes\n".encode(),
-                timeout=5 * 60,
-                capture_output=True,
-                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
             )
-            return json.loads(self.p.stdout)
-        except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as e:
+            stdout, stderr = self.p.communicate(timeout=5 * 60)
+            if stderr:
+                raise subprocess.SubprocessError
+
+            return json.loads(stdout)
+        except (subprocess.SubprocessError, subprocess.TimeoutExpired) as e:
             log.error(f"Issue getting speedtest results. {e}")
             return None
 
     def write_results(self, data):
         ts = datetime.fromisoformat(data["timestamp"].replace("Z", "+00:00"))
-        measurments = ["ping", "download", "upload", "server"]
+        measurements = ["ping", "download", "upload", "server"]  # measurements of interest
         log.debug(data)
 
         if not self._is_influx_ready():
             log.error("InfluxDB status check failed.")
             return
 
+        log.info("Writing speedtest results to InfluxDB.")
         for mem, value in data.items():
-            if mem in measurments:
+            if mem in measurements:
                 for k, v in value.items():
                     point = Point(mem).field(k, v).time(ts, WritePrecision.NS)
                     self.influx_api.write(self.influx_bucket, self.influx_org, point)
@@ -82,7 +89,7 @@ class SpeedtestWriter:
 
     def _is_influx_ready(self):
         try:
-            log.info(f"InfluxDB status: {self.influx_client.ready().status}")
+            log.debug(f"InfluxDB status: {self.influx_client.ready().status}")
             return True
         except urllib3.exceptions.NewConnectionError as e:
             return False
