@@ -15,7 +15,9 @@ logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)-8s %(m
 log = logging.getLogger(__name__)
 
 
-class SpeedtestWriter:
+class SpeedtestRunner:
+    """Runs Ookla speedtest and writes results to InfulxDB."""
+
     def __init__(self, influx_url="http://localhost:8086", token=None):
         if token is None:
             token = os.environ.get("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
@@ -115,8 +117,8 @@ class SpeedtestWriter:
 if __name__ == "__main__":
     if os.environ.get("RUNNING_IN_DOCKER"):
         log.info("Running in Docker.")
-        s = SpeedtestWriter(influx_url="http://influx:8086")
+        s = SpeedtestRunner(influx_url="http://influx:8086")
     else:
-        s = SpeedtestWriter()
+        s = SpeedtestRunner()
 
     s.run(hours=1)
