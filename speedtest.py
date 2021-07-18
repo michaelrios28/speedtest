@@ -11,7 +11,7 @@ import urllib3.exceptions
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
 
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)s %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 log = logging.getLogger(__name__)
 
 
@@ -50,7 +50,7 @@ class SpeedtestWriter:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            stdout, stderr = self.speedtest_proc.communicate(timeout=5 * 60)
+            stdout, stderr = self.speedtest_proc.communicate(timeout=2 * 60)
             if stderr:
                 raise subprocess.SubprocessError(stderr)
 
@@ -83,10 +83,21 @@ class SpeedtestWriter:
         log.info(f"Running w/ interval of {interval} seconds.")
 
         while True:
+            start = time.time()
             res = self.run_speedtest()
-            if res is not None:
-                s.write_results(res)
-            time.sleep(interval)  # TODO: can make this include for time of speedtest
+            log.debug(f"{res = }")
+            if res is None:
+                continue
+
+            s.write_results(res)
+
+            elapsed = time.time() - start
+            sleep_time = interval - elapsed
+            log.debug(f"time taken: {elapsed}")
+            log.debug(f"sleep time: {sleep_time}")
+
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
     def _is_influx_ready(self):
         try:
@@ -108,4 +119,4 @@ if __name__ == "__main__":
     else:
         s = SpeedtestWriter()
 
-    s.run(minutes=1)
+    s.run(hours=1)

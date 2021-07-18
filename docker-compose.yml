@@ -1,12 +1,14 @@
 version: "3.9"
 services:
-  speedtest:
+  speedtest-runner:
     build: .
     depends_on:
       - influx
     command: ["./wait-for-it.sh", "influx:8086", "--", "python", "speedtest.py"]
     environment:
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    container_name: speedtest-runner
+    restart: always
   influx:
     image: influxdb:2.0
     ports:
@@ -20,5 +22,16 @@ services:
       - DOCKER_INFLUXDB_INIT_ORG=my-org
       - DOCKER_INFLUXDB_INIT_BUCKET=speedtest-bucket
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+    container_name: influx-database
+    restart: always
+  grafana:
+    image: grafana/grafana:8.0.6-ubuntu
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana:/var/lib/grafana
+    container_name: grafana-dashboard
+    restart: always
 volumes:
   influxdb2:
+  grafana:
