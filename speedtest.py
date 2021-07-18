@@ -18,22 +18,23 @@ log = logging.getLogger(__name__)
 class SpeedtestWriter:
     def __init__(self, influx_url="http://localhost:8086", token=None):
         if token is None:
-            token = os.environ.get("INFLUXDB_TOKEN")
+            token = os.environ.get("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
 
         # initialize influx client
         self.influx_client = InfluxDBClient(url=influx_url, token=token)
-        self.influx_org = "org"
-        self.influx_bucket = "speedtest_results"
+        self.influx_org = "my-org"
+        self.influx_bucket = "speedtest-bucket"
         self.influx_api = self.influx_client.write_api(write_options=SYNCHRONOUS)
 
+        self.speedtest_proc = None
         signal.signal(signal.SIGINT, self.shutdown)
 
     def shutdown(self, *args):
         log.info("Shutting Down.")
-        if self.p and self.p.poll() is None:
+        if self.speedtest_proc and self.speedtest_proc.poll() is None:
             log.info("Terminating speedtest subprocess.")
-            self.p.terminate()
-            self.p.wait()
+            self.speedtest_proc.terminate()
+            self.speedtest_proc.wait()
         sys.exit(0)
 
     def run_speedtest(self):
@@ -44,14 +45,14 @@ class SpeedtestWriter:
 
         try:
             log.info("Running speedtest...")
-            self.p = subprocess.Popen(
+            self.speedtest_proc = subprocess.Popen(
                 ["speedtest", "--accept-license", "-f", "json"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
-            stdout, stderr = self.p.communicate(timeout=5 * 60)
+            stdout, stderr = self.speedtest_proc.communicate(timeout=5 * 60)
             if stderr:
-                raise subprocess.SubprocessError
+                raise subprocess.SubprocessError(stderr)
 
             return json.loads(stdout)
         except (subprocess.SubprocessError, subprocess.TimeoutExpired) as e:
@@ -85,7 +86,7 @@ class SpeedtestWriter:
             res = self.run_speedtest()
             if res is not None:
                 s.write_results(res)
-            time.sleep(interval)
+            time.sleep(interval)  # TODO: can make this include for time of speedtest
 
     def _is_influx_ready(self):
         try:
@@ -101,5 +102,10 @@ class SpeedtestWriter:
 
 
 if __name__ == "__main__":
-    s = SpeedtestWriter()
+    if os.environ.get("RUNNING_IN_DOCKER"):
+        log.info("Running in Docker.")
+        s = SpeedtestWriter(influx_url="http://influx:8086")
+    else:
+        s = SpeedtestWriter()
+
     s.run(minutes=1)
