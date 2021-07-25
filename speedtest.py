@@ -31,16 +31,31 @@ class SpeedtestRunner:
         self.speedtest_proc = None
         signal.signal(signal.SIGINT, self.shutdown)
 
-    def shutdown(self, *args):
-        log.info("Shutting Down.")
-        if self.speedtest_proc and self.speedtest_proc.poll() is None:
-            log.info("Terminating speedtest subprocess.")
-            self.speedtest_proc.terminate()
-            self.speedtest_proc.wait()
-        sys.exit(0)
+    def run(self, weeks=0, days=0, hours=0, minutes=0):
+        interval = (weeks * 604800) + (days * 86400) + (hours * 3600) + (
+            minutes * 60
+        ) or 3600  # default to daily if no args given
+        log.info(f"Running w/ interval of {interval} seconds.")
+
+        while True:
+            start = time.time()
+            res = self.run_speedtest()
+            log.debug(f"{res = }")
+
+            while res is None:
+                time.sleep(1)
+                res = self.run_speedtest()
+
+            s.write_results(res)
+            elapsed = time.time() - start
+            sleep_time = interval - elapsed
+            log.debug(f"time taken: {elapsed}")
+            log.debug(f"sleep time: {sleep_time}")
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
     def run_speedtest(self):
-        # Currently no point in running speedtest if influx is down, maybe store buffer of results
+        # currently no point in running speedtest if influx is down, maybe store buffer of results
         if not self._is_influx_ready():
             log.error("InfluxDB status check failed.")
             return None
@@ -54,6 +69,7 @@ class SpeedtestRunner:
             )
             stdout, stderr = self.speedtest_proc.communicate(timeout=2 * 60)
             if stderr:
+                log.error("Received stderr in speedtest call.")
                 raise subprocess.SubprocessError(stderr)
 
             return json.loads(stdout)
@@ -80,26 +96,13 @@ class SpeedtestRunner:
                         point = Point(mem).field(f"{k}_mbps", self.bps_to_mbps(v)).time(ts, WritePrecision.NS)
                         self.influx_api.write(self.influx_bucket, self.influx_org, point)
 
-    def run(self, weeks=0, days=0, hours=0, minutes=0):
-        interval = (weeks * 604800) + (days * 86400) + (hours * 3600) + (minutes * 60)
-        log.info(f"Running w/ interval of {interval} seconds.")
-
-        while True:
-            start = time.time()
-            res = self.run_speedtest()
-            log.debug(f"{res = }")
-            if res is None:
-                continue
-
-            s.write_results(res)
-
-            elapsed = time.time() - start
-            sleep_time = interval - elapsed
-            log.debug(f"time taken: {elapsed}")
-            log.debug(f"sleep time: {sleep_time}")
-
-            if sleep_time > 0:
-                time.sleep(sleep_time)
+    def shutdown(self, *args):
+        log.info("Shutting Down.")
+        if self.speedtest_proc and self.speedtest_proc.poll() is None:
+            log.info("Terminating speedtest subprocess.")
+            self.speedtest_proc.terminate()
+            self.speedtest_proc.wait()
+        sys.exit(0)
 
     def _is_influx_ready(self):
         try:
@@ -121,4 +124,4 @@ if __name__ == "__main__":
     else:
         s = SpeedtestRunner()
 
-    s.run(hours=1)
+    s.run(minutes=30)
