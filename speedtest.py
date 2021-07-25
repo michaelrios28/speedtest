@@ -22,13 +22,14 @@ class SpeedtestRunner:
         if token is None:
             token = os.environ.get("DOCKER_INFLUXDB_INIT_ADMIN_TOKEN")
 
-        # initialize influx client
         self.influx_client = InfluxDBClient(url=influx_url, token=token)
         self.influx_org = "my-org"
         self.influx_bucket = "speedtest-bucket"
         self.influx_api = self.influx_client.write_api(write_options=SYNCHRONOUS)
 
         self.speedtest_proc = None
+        self.measurements_of_interest = ["ping", "download", "upload", "server"]
+
         signal.signal(signal.SIGINT, self.shutdown)
 
     def run(self, weeks=0, days=0, hours=0, minutes=0):
@@ -55,7 +56,7 @@ class SpeedtestRunner:
                 time.sleep(sleep_time)
 
     def run_speedtest(self):
-        # currently no point in running speedtest if influx is down, maybe store buffer of results
+        # currently no point in running speedtest if influx is down, TODO maybe store buffer of results
         if not self._is_influx_ready():
             log.error("InfluxDB status check failed.")
             return None
@@ -72,14 +73,17 @@ class SpeedtestRunner:
                 log.error("Received stderr in speedtest call.")
                 raise subprocess.SubprocessError(stderr)
 
+            json_ = json.loads(stdout)
+            if not self._validate_json(json_):
+                raise ValueError()
+
             return json.loads(stdout)
-        except (subprocess.SubprocessError, subprocess.TimeoutExpired) as e:
+        except (subprocess.SubprocessError, subprocess.TimeoutExpired, ValueError) as e:
             log.error(f"Issue getting speedtest results. {e}")
             return None
 
     def write_results(self, data):
         ts = datetime.fromisoformat(data["timestamp"].replace("Z", "+00:00"))
-        measurements = ["ping", "download", "upload", "server"]  # measurements of interest
         log.debug(data)
 
         if not self._is_influx_ready():
@@ -88,7 +92,7 @@ class SpeedtestRunner:
 
         log.info("Writing speedtest results to InfluxDB.")
         for mem, value in data.items():
-            if mem in measurements:
+            if mem in self.measurements_of_interest:
                 for k, v in value.items():
                     point = Point(mem).field(k, v).time(ts, WritePrecision.NS)
                     self.influx_api.write(self.influx_bucket, self.influx_org, point)
@@ -103,6 +107,9 @@ class SpeedtestRunner:
             self.speedtest_proc.terminate()
             self.speedtest_proc.wait()
         sys.exit(0)
+
+    def _validate_json(self, data):
+        return all(m in data for m in self.measurements_of_interest)
 
     def _is_influx_ready(self):
         try:
@@ -122,6 +129,6 @@ if __name__ == "__main__":
         log.info("Running in Docker.")
         s = SpeedtestRunner(influx_url="http://influx:8086")
     else:
-        s = SpeedtestRunner()
+        s = SpeedtestRunner(influx_url="http://localhost:8086")
 
     s.run(minutes=30)
