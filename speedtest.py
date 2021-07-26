@@ -10,6 +10,7 @@ from datetime import datetime
 import urllib3.exceptions
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
+from pytimeparse.timeparse import timeparse
 
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(levelname)-8s %(message)s")
 log = logging.getLogger(__name__)
@@ -32,11 +33,8 @@ class SpeedtestRunner:
 
         signal.signal(signal.SIGINT, self.shutdown)
 
-    def run(self, weeks=0, days=0, hours=0, minutes=0):
-        interval = (weeks * 604800) + (days * 86400) + (hours * 3600) + (
-            minutes * 60
-        ) or 3600  # default to daily if no args given
-        log.info(f"Running w/ interval of {interval} seconds.")
+    def run(self, interval_s=3600):
+        log.info(f"Running w/ interval of {interval_s} seconds.")
 
         while True:
             start = time.time()
@@ -49,7 +47,7 @@ class SpeedtestRunner:
 
             s.write_results(res)
             elapsed = time.time() - start
-            sleep_time = interval - elapsed
+            sleep_time = interval_s - elapsed
             log.debug(f"time taken: {elapsed}")
             log.debug(f"sleep time: {sleep_time}")
             if sleep_time > 0:
@@ -131,4 +129,8 @@ if __name__ == "__main__":
     else:
         s = SpeedtestRunner(influx_url="http://localhost:8086")
 
-    s.run(minutes=30)
+    interval = os.environ.get("SPEEDTEST_INTERVAL", "1h")
+    log.debug(interval)
+    seconds = timeparse(interval)
+    log.debug(f"secs: {seconds}")
+    s.run(interval_s=seconds)

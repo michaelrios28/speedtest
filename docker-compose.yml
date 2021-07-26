@@ -1,4 +1,5 @@
 version: "3.9"
+
 services:
   speedtest-runner:
     build: .
@@ -6,32 +7,41 @@ services:
       - influx
     command: ["./wait-for-it.sh", "influx:8086", "--", "python", "speedtest.py"]
     environment:
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
+      - SPEEDTEST_INTERVAL=${SPEEDTEST_INTERVAL}
     container_name: speedtest-runner
     restart: always
+
   influx:
-    image: influxdb:2.0
+    image: influxdb:2.0.7
     ports:
       - "8086:8086"
     volumes:
       - influxdb2:/var/lib/influxdb2
     environment:
       - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=my-user
-      - DOCKER_INFLUXDB_INIT_PASSWORD=my-password
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB__USERNAME}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ORG=my-org
       - DOCKER_INFLUXDB_INIT_BUCKET=speedtest-bucket
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-auth-token
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_ADMIN_TOKEN}
     container_name: influx-database
     restart: always
+
   grafana:
     image: grafana/grafana:8.0.6-ubuntu
     ports:
       - "3000:3000"
     volumes:
       - grafana:/var/lib/grafana
+      - ./data/dashboard.json:/usr/share/grafana/public/dashboards/home.json # home dashboard
+      - ./data/datasource.yml:/etc/grafana/provisioning/datasources/datasource.yaml # provision setup of influx as datasource
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
     container_name: grafana-dashboard
     restart: always
+
 volumes:
   influxdb2:
   grafana:
