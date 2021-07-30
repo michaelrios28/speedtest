@@ -23,189 +23,6 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "light-green",
-            "mode": "fixed"
-          },
-          "custom": {
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 20,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 4,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "ms"
-        },
-        "overrides": [
-          {
-            "__systemRef": "hideSeriesFrom",
-            "matcher": {
-              "id": "byNames",
-              "options": {
-                "mode": "exclude",
-                "names": [
-                  "latency"
-                ],
-                "prefix": "All except:",
-                "readOnly": true
-              }
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": false,
-                  "tooltip": false,
-                  "viz": true
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "jitter"
-            },
-            "properties": [
-              {
-                "id": "color",
-                "value": {
-                  "fixedColor": "light-purple",
-                  "mode": "fixed"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 12,
-        "x": 0,
-        "y": 0
-      },
-      "id": 11,
-      "options": {
-        "legend": {
-          "calcs": [
-            "min",
-            "max",
-            "mean",
-            "last"
-          ],
-          "displayMode": "table",
-          "placement": "bottom"
-        },
-        "tooltip": {
-          "mode": "multi"
-        }
-      },
-      "targets": [
-        {
-          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\")\n  |> filter(fn: (r) => r[\"_field\"] == \"jitter\" or r[\"_field\"] == \"latency\")",
-          "refId": "A"
-        }
-      ],
-      "title": "Ping",
-      "type": "timeseries"
-    },
-    {
-      "datasource": "InfluxDB_v2_Flux",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "green",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "ms"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 4,
-        "x": 12,
-        "y": 0
-      },
-      "id": 4,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "8.0.6",
-      "targets": [
-        {
-          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\")\n  |> filter(fn: (r) => r[\"_field\"] == \"latency\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
-          "refId": "A"
-        }
-      ],
-      "title": "Average Ping",
-      "type": "stat"
-    },
-    {
-      "datasource": "InfluxDB_v2_Flux",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
             "fixedColor": "light-blue",
             "mode": "fixed"
           },
@@ -228,9 +45,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 4,
-        "x": 16,
+        "h": 14,
+        "w": 3,
+        "x": 0,
         "y": 0
       },
       "id": 8,
@@ -257,64 +74,6 @@
       "timeFrom": null,
       "timeShift": null,
       "title": "Average Download Bandwidth",
-      "type": "gauge"
-    },
-    {
-      "datasource": "InfluxDB_v2_Flux",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "light-red",
-            "mode": "fixed"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "percentage",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 100
-              }
-            ]
-          },
-          "unit": "Mbits"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 8,
-        "w": 4,
-        "x": 20,
-        "y": 0
-      },
-      "id": 9,
-      "options": {
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
-      },
-      "pluginVersion": "8.0.6",
-      "targets": [
-        {
-          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"upload\")\n  |> filter(fn: (r) => r[\"_field\"] == \"bandwidth_mbps\")\n  |> mean(column: \"_value\")\n",
-          "refId": "A"
-        }
-      ],
-      "timeFrom": null,
-      "timeShift": null,
-      "title": "Average Upload Bandwidth",
       "type": "gauge"
     },
     {
@@ -403,10 +162,10 @@
         ]
       },
       "gridPos": {
-        "h": 15,
-        "w": 24,
-        "x": 0,
-        "y": 8
+        "h": 17,
+        "w": 21,
+        "x": 3,
+        "y": 0
       },
       "id": 2,
       "options": {
@@ -418,7 +177,7 @@
             "last"
           ],
           "displayMode": "table",
-          "placement": "bottom"
+          "placement": "right"
         },
         "tooltip": {
           "mode": "multi"
@@ -432,6 +191,451 @@
       ],
       "title": "Bandwidth",
       "type": "timeseries"
+    },
+    {
+      "datasource": "InfluxDB_v2_Flux",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-red",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          },
+          "unit": "Mbits"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 14,
+        "w": 3,
+        "x": 0,
+        "y": 14
+      },
+      "id": 9,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "text": {}
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"upload\")\n  |> filter(fn: (r) => r[\"_field\"] == \"bandwidth_mbps\")\n  |> mean(column: \"_value\")\n",
+          "refId": "A"
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Average Upload Bandwidth",
+      "type": "gauge"
+    },
+    {
+      "datasource": "InfluxDB_v2_Flux",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 20,
+            "gradientMode": "opacity",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 4,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "jitter"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "light-purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 21,
+        "x": 3,
+        "y": 17
+      },
+      "id": 11,
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "targets": [
+        {
+          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\")\n  |> filter(fn: (r) => r[\"_field\"] == \"jitter\" or r[\"_field\"] == \"latency\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Ping",
+      "type": "timeseries"
+    },
+    {
+      "datasource": "InfluxDB_v2_Flux",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 3,
+        "x": 0,
+        "y": 28
+      },
+      "id": 4,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\")\n  |> filter(fn: (r) => r[\"_field\"] == \"latency\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Ping",
+      "type": "stat"
+    },
+    {
+      "datasource": "InfluxDB_v2_Flux",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "center",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value_oneAlias {_field_oneAlias=\"ip\", _field_twoAlias=\"location\", _measurement_oneAlias=\"server\", _measurement_twoAlias=\"server\", _start=\"2021-07-23 05:43:23 +0000 UTC\", _stop=\"2021-07-30 05:43:23 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 314
+              },
+              {
+                "id": "displayName",
+                "value": "ip"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 236
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_value_ip {_field_ip=\"ip\", _field_location=\"location\", _measurement_ip=\"server\", _measurement_location=\"server\", _start=\"2021-07-23 05:46:43 +0000 UTC\", _stop=\"2021-07-30 05:46:43 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 723
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "ip {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 180
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "host {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 345
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "country {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 172
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "location {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 228
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "port {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 218
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 272
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 21,
+        "x": 3,
+        "y": 33
+      },
+      "id": 13,
+      "options": {
+        "frameIndex": 3,
+        "showHeader": false,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "port {_start=\"2021-07-23 05:58:35 +0000 UTC\", _stop=\"2021-07-30 05:58:35 +0000 UTC\"}"
+          }
+        ]
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "hide": false,
+          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"server\")\n  |> filter(fn: (r) => r[\"_field\"] == \"country\" or r[\"_field\"] == \"location\" or r[\"_field\"] == \"host\" or r[\"_field\"] == \"ip\" or r[\"_field\"] == \"port\" or r[\"_field\"] == \"name\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Panel Title",
+      "type": "table"
+    },
+    {
+      "datasource": "InfluxDB_v2_Flux",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "light-purple",
+            "mode": "fixed"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 3,
+        "x": 0,
+        "y": 38
+      },
+      "id": 14,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"ping\")\n  |> filter(fn: (r) => r[\"_field\"] == \"jitter\")\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> yield(name: \"mean\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Average Jitter",
+      "type": "stat"
     }
   ],
   "refresh": "",
@@ -449,5 +653,5 @@
   "timezone": "",
   "title": "Network Metrics",
   "uid": "DhRnSgWnk",
-  "version": 51
+  "version": 7
 }
