@@ -6,11 +6,11 @@ datasources:
     access: proxy
     url: http://influx:8086
     secureJsonData:
-      token: my-super-secret-auth-token
+      token: ${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     jsonData:
       version: Flux
       organization: my-org
       defaultBucket: speedtest-bucket
       tlsSkipVerify: true
-      basicAuthUser: my-user
-      basicAuthPassword: my-password
+      basicAuthUser: ${DOCKER_INFLUXDB_INIT_USERNAME}
+      basicAuthPassword: ${DOCKER_INFLUXDB_INIT_PASSWORD}
