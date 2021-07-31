@@ -23,7 +23,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "light-blue",
+            "fixedColor": "#4ac6b7",
             "mode": "fixed"
           },
           "mappings": [],
@@ -45,8 +45,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
-        "w": 3,
+        "h": 6,
+        "w": 4,
         "x": 0,
         "y": 0
       },
@@ -97,7 +97,7 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineWidth": 4,
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -138,7 +138,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "light-red",
+                  "fixedColor": "#ff7070",
                   "mode": "fixed"
                 }
               }
@@ -153,7 +153,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "light-blue",
+                  "fixedColor": "#4ac6b7",
                   "mode": "fixed"
                 }
               }
@@ -162,9 +162,9 @@
         ]
       },
       "gridPos": {
-        "h": 17,
-        "w": 21,
-        "x": 3,
+        "h": 9,
+        "w": 20,
+        "x": 4,
         "y": 0
       },
       "id": 2,
@@ -197,7 +197,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "light-red",
+            "fixedColor": "#ff7070",
             "mode": "fixed"
           },
           "mappings": [],
@@ -219,10 +219,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 14,
-        "w": 3,
+        "h": 6,
+        "w": 4,
         "x": 0,
-        "y": 14
+        "y": 6
       },
       "id": 9,
       "options": {
@@ -255,7 +255,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "light-green",
+            "fixedColor": "#965f8a",
             "mode": "fixed"
           },
           "custom": {
@@ -271,7 +271,7 @@
               "viz": false
             },
             "lineInterpolation": "linear",
-            "lineWidth": 4,
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -312,7 +312,7 @@
               {
                 "id": "color",
                 "value": {
-                  "fixedColor": "light-purple",
+                  "fixedColor": "#4f5e7f",
                   "mode": "fixed"
                 }
               }
@@ -321,10 +321,10 @@
         ]
       },
       "gridPos": {
-        "h": 16,
-        "w": 21,
-        "x": 3,
-        "y": 17
+        "h": 9,
+        "w": 20,
+        "x": 4,
+        "y": 9
       },
       "id": 11,
       "options": {
@@ -356,7 +356,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "fixedColor": "green",
+            "fixedColor": "#965f8a",
             "mode": "fixed"
           },
           "mappings": [],
@@ -378,10 +378,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 10,
-        "w": 3,
+        "h": 6,
+        "w": 4,
         "x": 0,
-        "y": 28
+        "y": 12
       },
       "id": 4,
       "options": {
@@ -414,177 +414,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed"
-          },
-          "custom": {
-            "align": "center",
-            "displayMode": "auto",
-            "filterable": false
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "_value_oneAlias {_field_oneAlias=\"ip\", _field_twoAlias=\"location\", _measurement_oneAlias=\"server\", _measurement_twoAlias=\"server\", _start=\"2021-07-23 05:43:23 +0000 UTC\", _stop=\"2021-07-30 05:43:23 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 314
-              },
-              {
-                "id": "displayName",
-                "value": "ip"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "_time"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 236
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "_value_ip {_field_ip=\"ip\", _field_location=\"location\", _measurement_ip=\"server\", _measurement_location=\"server\", _start=\"2021-07-23 05:46:43 +0000 UTC\", _stop=\"2021-07-30 05:46:43 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 723
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "ip {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 180
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "host {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 345
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "country {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 172
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "location {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 228
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "port {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 218
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "name {_start=\"2021-07-23 05:55:17 +0000 UTC\", _stop=\"2021-07-30 05:55:17 +0000 UTC\"}"
-            },
-            "properties": [
-              {
-                "id": "custom.width",
-                "value": 272
-              }
-            ]
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 16,
-        "w": 21,
-        "x": 3,
-        "y": 33
-      },
-      "id": 13,
-      "options": {
-        "frameIndex": 3,
-        "showHeader": false,
-        "sortBy": [
-          {
-            "desc": false,
-            "displayName": "port {_start=\"2021-07-23 05:58:35 +0000 UTC\", _stop=\"2021-07-30 05:58:35 +0000 UTC\"}"
-          }
-        ]
-      },
-      "pluginVersion": "8.0.6",
-      "targets": [
-        {
-          "hide": false,
-          "query": "from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"server\")\n  |> filter(fn: (r) => r[\"_field\"] == \"country\" or r[\"_field\"] == \"location\" or r[\"_field\"] == \"host\" or r[\"_field\"] == \"ip\" or r[\"_field\"] == \"port\" or r[\"_field\"] == \"name\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n",
-          "refId": "A"
-        }
-      ],
-      "title": "Panel Title",
-      "type": "table"
-    },
-    {
-      "datasource": "InfluxDB_v2_Flux",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "fixedColor": "light-purple",
+            "fixedColor": "#4f5e7f",
             "mode": "fixed"
           },
           "mappings": [],
@@ -606,10 +436,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 11,
-        "w": 3,
+        "h": 6,
+        "w": 4,
         "x": 0,
-        "y": 38
+        "y": 18
       },
       "id": 14,
       "options": {
@@ -636,6 +466,148 @@
       ],
       "title": "Average Jitter",
       "type": "stat"
+    },
+    {
+      "datasource": "InfluxDB_v2_Flux",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "filterable": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "country {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:27:30 +0000 UTC\", _start_server=\"2021-07-29 02:27:30 +0000 UTC\", _stop_result=\"2021-07-31 02:27:30 +0000 UTC\", _stop_server=\"2021-07-31 02:27:30 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 164
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "location {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:27:30 +0000 UTC\", _start_server=\"2021-07-29 02:27:30 +0000 UTC\", _stop_result=\"2021-07-31 02:27:30 +0000 UTC\", _stop_server=\"2021-07-31 02:27:30 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 167
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "_time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 223
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:27:30 +0000 UTC\", _start_server=\"2021-07-29 02:27:30 +0000 UTC\", _stop_result=\"2021-07-31 02:27:30 +0000 UTC\", _stop_server=\"2021-07-31 02:27:30 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 227
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:30:35 +0000 UTC\", _start_server=\"2021-07-29 02:30:35 +0000 UTC\", _stop_result=\"2021-07-31 02:30:35 +0000 UTC\", _stop_server=\"2021-07-31 02:30:35 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 193
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "name {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:32:14 +0000 UTC\", _start_server=\"2021-07-29 02:32:14 +0000 UTC\", _stop_result=\"2021-07-31 02:32:14 +0000 UTC\", _stop_server=\"2021-07-31 02:32:14 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 174
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "location {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:32:14 +0000 UTC\", _start_server=\"2021-07-29 02:32:14 +0000 UTC\", _stop_result=\"2021-07-31 02:32:14 +0000 UTC\", _stop_server=\"2021-07-31 02:32:14 +0000 UTC\"}"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 298
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 20,
+        "x": 4,
+        "y": 18
+      },
+      "id": 13,
+      "options": {
+        "frameIndex": 3,
+        "showHeader": false,
+        "sortBy": [
+          {
+            "desc": false,
+            "displayName": "name {_measurement_result=\"result\", _measurement_server=\"server\", _start_result=\"2021-07-29 02:34:03 +0000 UTC\", _start_server=\"2021-07-29 02:34:03 +0000 UTC\", _stop_result=\"2021-07-31 02:34:03 +0000 UTC\", _stop_server=\"2021-07-31 02:34:03 +0000 UTC\"}"
+          }
+        ]
+      },
+      "pluginVersion": "8.0.6",
+      "targets": [
+        {
+          "hide": false,
+          "query": "server = from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"server\")\n  |> filter(fn: (r) => r[\"_field\"] == \"location\" or r[\"_field\"] == \"country\" or r[\"_field\"] == \"name\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n\n\nresult = from(bucket: \"speedtest-bucket\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r[\"_measurement\"] == \"result\")\n  |> filter(fn: (r) => r[\"_field\"] == \"url\")\n  |> pivot(rowKey:[\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n\njoin(tables: {result, server}, on: [\"_time\"] )\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Details",
+      "type": "table"
     }
   ],
   "refresh": "",
@@ -646,12 +618,12 @@
     "list": []
   },
   "time": {
-    "from": "now-24h",
+    "from": "now-7d",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Network Metrics",
   "uid": "DhRnSgWnk",
-  "version": 7
+  "version": 18
 }

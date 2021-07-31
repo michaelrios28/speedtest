@@ -2,16 +2,18 @@
 
 Easy to setup monitoring tool/dashboard for internet speedtest results.
 
-![dashboard](images/dashboard.png)
+![dashboard](images/dashboard.jpg)
 
-## Run
+## Usage
 
-Docker is the only dependency for this project.
+`Docker` is the only dependency for this project.
+Clone this repository and run the following command:
 
-1. Clone this repository
-2. Optionally configure the `.env` file w/ different parameters e.g. the interval between speedtests
-3. Run `docker compose up -d` to start the background process
-4. Visualize speedtest results at `http://localhost:3000`
+### `docker compose up -d`
+
+> Optionally configure the `.env` file w/ different parameters e.g. the interval between speedtests.
+
+## How It Works
 
 This will start 3 docker containers:
 

@@ -29,7 +29,7 @@ class SpeedtestRunner:
         self.influx_api = self.influx_client.write_api(write_options=SYNCHRONOUS)
 
         self.speedtest_proc = None
-        self.measurements_of_interest = ["ping", "download", "upload", "server"]
+        self.measurements_of_interest = ["ping", "download", "upload", "server", "result"]
 
         signal.signal(signal.SIGINT, self.shutdown)
 
@@ -38,12 +38,11 @@ class SpeedtestRunner:
 
         while True:
             start = time.time()
-            res = self.run_speedtest()
-            log.debug(f"{res = }")
-
+            res = None
             while res is None:
-                time.sleep(1)
+                time.sleep(2)
                 res = self.run_speedtest()
+                log.debug(f"{res = }")
 
             s.write_results(res)
             elapsed = time.time() - start
@@ -77,6 +76,8 @@ class SpeedtestRunner:
 
             return json.loads(stdout)
         except (subprocess.SubprocessError, subprocess.TimeoutExpired, ValueError) as e:
+            self.speedtest_proc.terminate()
+            self.speedtest_proc.wait()
             log.error(f"Issue getting speedtest results. {e}")
             return None
 
@@ -130,7 +131,5 @@ if __name__ == "__main__":
         s = SpeedtestRunner(influx_url="http://localhost:8086")
 
     interval = os.environ.get("SPEEDTEST_INTERVAL", "1h")
-    log.debug(interval)
     seconds = timeparse(interval)
-    log.debug(f"secs: {seconds}")
     s.run(interval_s=seconds)
